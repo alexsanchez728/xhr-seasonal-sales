@@ -1,6 +1,5 @@
 {
-  "categories": [
-    {
+  "categories": [{
       "id": 1,
       "name": "Apparel",
       "season_discount": "Winter",

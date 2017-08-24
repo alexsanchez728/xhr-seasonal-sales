@@ -1,6 +1,5 @@
 {
-  "products": [
-    {
+  "products": [{
       "id": 0,
       "name": "Kids socks",
       "price": 4.99,
