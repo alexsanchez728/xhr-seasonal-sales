@@ -2,47 +2,57 @@
 var products = [];
 var categories = [];
 
-	function domString(crap) {
+function domString(crap) {
 	var domString = "";
 	for (var i = 0; i < crap.length; i++){
 		domString += 	`<div class="productItem">`
-		domString += 		`<h1>${crap[i].name}</h1>`
-		domString += 		`<h3>${crap[i].price}</h3>`
-		domString += 		`<h5>${crap[i].color}</h5>`
+		// domString += 		`<h1>${crap[i].name}</h1>`
+		// domString += 		`<h3>${crap[i].price}</h3>`
+		// domString += 		`<h5>${crap[i].color}</h5>`
 		domString += 	`</div>`
 	}
-		writeToDom(domString);
+	writeToDom(domString);
 }
 
 function writeToDom(strang) {
-	var catContainer = document.getElementById("kat-koral");
-	catContainer.innerHTML += strang;
+	var prodContainer = document.getElementById("product-container");
+	prodContainer.innerHTML += strang;
 }
 
+// Function to add relevant data from "catagories" to "products"
 function addDepartmentToProducts(){
+	// Run throguh each product...
 	for (var i = 0; i < products.length; i++) {
-		for (var j = 0; j < deparments.length; j++) {
-			if (deparments[i].id === products[i]["category_id"]){
-				products[i].categoryName = department[i].name;
-				products[i].categorySeason = deparment[i][""]
+		//... And while in each product loop through the categories array ...
+		for (var j = 0; j < categories.length; j++) {
+			// ... To compare the ids between the two arrays because if they match up ...
+			if (categories[i].id === products[i]["category_id"]){
+				// ... Give the product the corresponding deparment name, season discount, and discount.
+				products[i].categoryName = categories[i].name;
+				products[i].categorySeason = categories[i][""]
 			}
 		}
+
 	}
 }
 
 function moveOn() {
 	addDepartmentToProducts();
+	domString()
 }
+
 // Transfering JSON products array into js array 'products'
 function executeThisCodeAfterFileLoads() {
 	var data = JSON.parse(this.responseText);
 	products = data.products;
+	// after the first request loads, send the request for the second
 	myRequestForCategories.send();
 }
 // Transfering JSON categories array into js array 'categories'
 function executeThisCodeAfterFileLoads2() {
 	var data = JSON.parse(this.responseText);
 	categories = data.categories;
+	// Only after both requests complete wil anything else happen
 	moveOn();
 }
 function executeThisCodeIfFileErrors () {
