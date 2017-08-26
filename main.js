@@ -3,7 +3,6 @@ var products = [];
 var categories = [];
 var seasonSelect = document.getElementById("season-select");
 var discountsButton = document.getElementById("showDiscounts");
-// whichever option is selected is returned as an index
 
 function domString(crap) {
 	var domString = "";
@@ -12,29 +11,56 @@ function domString(crap) {
 		domString += 		`<h1>${crap[i].name}</h1>`;
 		domString += 		`<h5>Department: ${crap[i].categoryName}</h5>`;
 		domString += 		`<h3>&#36;${crap[i].price}</h3>`;
-
+		domString +=  `</div>`
+	}
 	writeToDom(domString);
 }
 
-calculateDiscount(9.99);
 discountsButton.addEventListener("click", function(){
 	var chosenSeason = seasonSelect.value;
-	console.log(chosenSeason);
 	if(chosenSeason === "winter"){
+	console.log("Winter numbers", chosenSeason);
 		for (var i = 0; i < products.length; i++){
-			if (products[i].categoryName === "winter"){
-				calculateDiscount(products[i].price, products[i].discount);
+			if (products[i].categorySeason === "Winter"){
+				console.log(products[i].categorySeason);
+				// console.log(calculateDiscount(9.99, 0.15));
+				console.log(calculateDiscount(products[i].price, products[i].discount));
 			}
 		}
 	}
-})
+
+	if(chosenSeason === "autumn"){
+		console.log("Autumn numbers", chosenSeason);
+		for (var i = 0; i < products.length; i++){
+			if (products[i].categorySeason === "Autumn"){
+				console.log(products[i].categorySeason);
+				// console.log(calculateDiscount(9.99, 0.15));
+				console.log(calculateDiscount(products[i].price, products[i].discount));
+			}
+		}
+	}
+
+	if(chosenSeason === "spring"){
+		console.log("Spring numbers", chosenSeason);
+		for (var i = 0; i < products.length; i++){
+			if (products[i].categorySeason === "Spring"){
+				console.log(products[i].categorySeason);
+				// console.log(calculateDiscount(9.99, 0.15));
+				console.log(calculateDiscount(products[i].price, products[i].discount));
+			}
+		}
+	}
+
+
+});
+
 //discount functions
 function calculateDiscount(itemPrice, seasonDiscount) {
 	itemPrice = itemPrice * 100;
 	var discount = itemPrice * seasonDiscount;
 	itemPrice = (itemPrice - discount) / 100;
 	itemPrice = itemPrice.toFixed(2);
-	console.log(itemPrice);
+	return itemPrice;
 }
 
 //winter
@@ -74,7 +100,6 @@ function executeThisCodeAfterFileLoads() {
 	var data = JSON.parse(this.responseText);
 	products = data.products;
 	// after the first request loads, send the request for the second
-	myRequestForCategories.send();
 }
 // Transfering JSON categories array into js array 'categories'
 function executeThisCodeAfterFileLoads2() {
@@ -96,4 +121,5 @@ myRequestForProducts.send();
 var myRequestForCategories = new XMLHttpRequest();
 myRequestForCategories.addEventListener("load", executeThisCodeAfterFileLoads2);
 myRequestForCategories.addEventListener("error", executeThisCodeIfFileErrors);
-myRequestForCategories.open("GET", "categories.json");
+myRequestForCategories.open("GET", "categories.json");	
+myRequestForCategories.send();
