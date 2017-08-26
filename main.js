@@ -23,38 +23,38 @@ discountsButton.addEventListener("click", function(){
 		for (var i = 0; i < products.length; i++){
 			if (products[i].categorySeason === "Winter"){
 				console.log(products[i].categorySeason);
-				// console.log(calculateDiscount(9.99, 0.15));
 				console.log(calculateDiscount(products[i].price, products[i].discount));
 			}
 		}
 	}
-
 	if(chosenSeason === "autumn"){
 		console.log("Autumn numbers", chosenSeason);
 		for (var i = 0; i < products.length; i++){
 			if (products[i].categorySeason === "Autumn"){
 				console.log(products[i].categorySeason);
-				// console.log(calculateDiscount(9.99, 0.15));
 				console.log(calculateDiscount(products[i].price, products[i].discount));
 			}
 		}
 	}
-
 	if(chosenSeason === "spring"){
 		console.log("Spring numbers", chosenSeason);
 		for (var i = 0; i < products.length; i++){
 			if (products[i].categorySeason === "Spring"){
 				console.log(products[i].categorySeason);
-				// console.log(calculateDiscount(9.99, 0.15));
 				console.log(calculateDiscount(products[i].price, products[i].discount));
 			}
 		}
 	}
-
-
 });
 
-//discount functions
+
+//stretch goal function to shorten for and if loop
+// function currentSeasonToDiscount(season){
+
+// }
+
+
+//discount function
 function calculateDiscount(itemPrice, seasonDiscount) {
 	itemPrice = itemPrice * 100;
 	var discount = itemPrice * seasonDiscount;
@@ -62,13 +62,6 @@ function calculateDiscount(itemPrice, seasonDiscount) {
 	itemPrice = itemPrice.toFixed(2);
 	return itemPrice;
 }
-
-//winter
-
-//autumn
-
-//spring
-
 
 function moveOn() {
 	addDepartmentToProducts();
