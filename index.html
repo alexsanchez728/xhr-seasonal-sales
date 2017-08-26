@@ -12,11 +12,16 @@ The two JSON representations above should be in two files: products.json, and ca
 </head>
 <body>
 	<main>
-		<select id="select"> <!--Supplement an id here instead of using 'name'-->
+
+		<label for="seasonal-discounts">Seasonal Discounts</label>
+		<select id="season-select" name="seasonal-discounts">
+		  <option value="none" selected>None selected</option> 
 		  <option value="winter">Winter</option> 
-		  <option value="autumn" selected>Autumn</option>
+		  <option value="autumn">Autumn</option>
 		  <option value="spring">Spring</option>
 		</select>
+		<input type="button" id="showDiscounts" value="Show discounts"></input>
+
 		<div id="product-container"></div>
 
 	</main>
