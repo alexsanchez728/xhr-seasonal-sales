@@ -31,10 +31,16 @@ function catchDiscountChoice(productsArray) {
 			// when the chosen discount season matches the season of the product...
 			if (product.categorySeason.toLowerCase() === chosenSeason.toLowerCase()) {
 				// ... add that discounted price to the product in the array
+				// product["discountedPrice"] = calculateDiscount(product.price, product.discount);
 				product["discountedPrice"] = calculateDiscount(product.price, product.discount);
+			}
+			if (chosenSeason.toLowerCase() === "none" && product["discountedPrice"] != undefined) {
+				// product["discountedPrice"]
+				console.log("find the discounted price");
 			}
 		})
 		console.log("Products array with discountedPrice added", productsArray);
+
 	});
 	}
 
@@ -103,8 +109,8 @@ function combinedArray(productsArray, categoriesArray) {
 	});
 	console.log("all products", productsArray);
 	// Step 9
+	catchDiscountChoice(productsArray);
 	domString(productsArray);
 
 	// Send the complete array to the discount function, prepping it with the knowledge of the array, before it even runs
-	catchDiscountChoice(productsArray);
 }
