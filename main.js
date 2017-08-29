@@ -1,8 +1,5 @@
-// Initialize the 2 arrays that the JSON arrays will be put into
-var products = [];
-var categories = [];
-var seasonSelect = document.getElementById("season-select");
-var discountsButton = document.getElementById("showDiscounts");
+		var seasonSelect = document.getElementById("season-select");
+		var discountsButton = document.getElementById("showDiscounts");
 // var isDiscounted = false;
 // var priceEl = "";
 // var priceTextNode = "";
@@ -22,40 +19,24 @@ function writeToDom(strang) {
 	var prodContainer = document.getElementById("product-container");
 	prodContainer.innerHTML += strang;
 }
-discountsButton.addEventListener("click", function(){
-	var chosenSeason = seasonSelect.value;
-	if(chosenSeason === "winter"){
-	// console.log("Winter numbers", chosenSeason);
-		for (var i = 0; i < products.length; i++){
-			if (products[i].categorySeason === "Winter"){
-				isDiscounted = true;
-				var winterDiscount = calculateDiscount(products[i].price, products[i].discount);
-				// console.log(winterDiscount);
-				// priceEl = document.createElement(`h3`);
-				// priceTextNode = document.createTextNode(`Your discount! &#36;${winterDiscount}`);
-				// priceEl.appendChild(priceTextNode);
-				// console.log(priceEl);
 
+// event on the "Show discouns button" ...
+function catchDiscountChoice(productsArray) {
+
+	discountsButton.addEventListener("click", function(){
+		// ... assign the current season to a variable ...
+		var chosenSeason = seasonSelect.value;
+		// ... after that, loop through each product ...
+		productsArray.forEach(function(product){
+			// when the chosen discount season matches the season of the product...
+			if (product.categorySeason.toLowerCase() === chosenSeason.toLowerCase()) {
+				// ... add that discounted price to the product in the array
+				product["discountedPrice"] = calculateDiscount(product.price, product.discount);
 			}
-		}
+		})
+		console.log("Products array with discountedPrice added", productsArray);
+	});
 	}
-	if(chosenSeason === "autumn"){
-		console.log("Autumn numbers", chosenSeason);
-		for (var i = 0; i < products.length; i++){
-			if (products[i].categorySeason === "Autumn"){
-				console.log(calculateDiscount(products[i].price, products[i].discount));
-			}
-		}
-	}
-	if(chosenSeason === "spring"){
-		console.log("Spring numbers", chosenSeason);
-		for (var i = 0; i < products.length; i++){
-			if (products[i].categorySeason === "Spring"){
-				console.log(calculateDiscount(products[i].price, products[i].discount));
-			}
-		}
-	}
-});
 
 //discount function
 function calculateDiscount(itemPrice, seasonDiscount) {
@@ -92,7 +73,6 @@ function getCategories(products){
 	myRequestForCategories.open("GET", "categories.json");	
 	myRequestForCategories.send();
 
-
 	// step 4
 	function executeThisCodeAfterFileLoads2() {
 		var categoriesData = JSON.parse(this.responseText).categories;
@@ -105,8 +85,8 @@ function getCategories(products){
 // ... and combined them into productsArray
 // ... and sent it to domString function
 function combinedArray(productsArray, categoriesArray) {
-	console.log("products from combined array", productsArray);
-	console.log("cats from combined array", categoriesArray);
+	// console.log("products from combined array", productsArray);
+	// console.log("cats from combined array", categoriesArray);
 	// loop through products and look at category_id
 	productsArray.forEach(function(product){
 		var currentProductId = product["category_id"];
@@ -121,8 +101,10 @@ function combinedArray(productsArray, categoriesArray) {
 			}
 		})
 	});
-			console.log("all products", productsArray);
-			// Step 9
-			domString(productsArray);
+	console.log("all products", productsArray);
+	// Step 9
+	domString(productsArray);
+
+	// Send the complete array to the discount function, prepping it with the knowledge of the array, before it even runs
+	catchDiscountChoice(productsArray);
 }
-			console.log("all products", productsArray);
