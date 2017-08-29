@@ -3,6 +3,9 @@ var products = [];
 var categories = [];
 var seasonSelect = document.getElementById("season-select");
 var discountsButton = document.getElementById("showDiscounts");
+// var isDiscounted = false;
+// var priceEl = "";
+// var priceTextNode = "";
 
 function domString(crap) {
 	var domString = "";
@@ -15,15 +18,24 @@ function domString(crap) {
 	}
 	writeToDom(domString);
 }
-
+function writeToDom(strang) {
+	var prodContainer = document.getElementById("product-container");
+	prodContainer.innerHTML += strang;
+}
 discountsButton.addEventListener("click", function(){
 	var chosenSeason = seasonSelect.value;
 	if(chosenSeason === "winter"){
-	console.log("Winter numbers", chosenSeason);
+	// console.log("Winter numbers", chosenSeason);
 		for (var i = 0; i < products.length; i++){
 			if (products[i].categorySeason === "Winter"){
-				console.log(products[i].categorySeason);
-				console.log(calculateDiscount(products[i].price, products[i].discount));
+				isDiscounted = true;
+				var winterDiscount = calculateDiscount(products[i].price, products[i].discount);
+				// console.log(winterDiscount);
+				// priceEl = document.createElement(`h3`);
+				// priceTextNode = document.createTextNode(`Your discount! &#36;${winterDiscount}`);
+				// priceEl.appendChild(priceTextNode);
+				// console.log(priceEl);
+
 			}
 		}
 	}
@@ -31,7 +43,6 @@ discountsButton.addEventListener("click", function(){
 		console.log("Autumn numbers", chosenSeason);
 		for (var i = 0; i < products.length; i++){
 			if (products[i].categorySeason === "Autumn"){
-				console.log(products[i].categorySeason);
 				console.log(calculateDiscount(products[i].price, products[i].discount));
 			}
 		}
@@ -40,19 +51,11 @@ discountsButton.addEventListener("click", function(){
 		console.log("Spring numbers", chosenSeason);
 		for (var i = 0; i < products.length; i++){
 			if (products[i].categorySeason === "Spring"){
-				console.log(products[i].categorySeason);
 				console.log(calculateDiscount(products[i].price, products[i].discount));
 			}
 		}
 	}
 });
-
-
-//stretch goal function to shorten for and if loop
-// function currentSeasonToDiscount(season){
-
-// }
-
 
 //discount function
 function calculateDiscount(itemPrice, seasonDiscount) {
@@ -62,48 +65,18 @@ function calculateDiscount(itemPrice, seasonDiscount) {
 	itemPrice = itemPrice.toFixed(2);
 	return itemPrice;
 }
-
-function moveOn() {
-	addDepartmentToProducts();
-	domString(products);
-	console.log(products);
-}
-function writeToDom(strang) {
-	var prodContainer = document.getElementById("product-container");
-	prodContainer.innerHTML += strang;
-}
-// Function to add relevant data from "catagories" to "products"
-function addDepartmentToProducts(){
-	// Run throguh each product...
-	for (var i = 0; i < products.length; i++) {
-		//... And while in each product loop through the categories array ...
-		for (var j = 0; j < categories.length; j++) {
-			// ... To compare the ids between the two arrays because if they match up ...
-			if (products[i]["category_id"] === categories[j]["id"]){
-				// ... Give the product the corresponding deparment name, season discount, and discount.
-				products[i].categoryName = categories[j].name;
-				products[i].categorySeason = categories[j]["season_discount"]
-				products[i].discount = categories[j].discount;
-			}
-		}
-	}
-}
-// Transfering JSON products array into js array 'products'
+// Step 2
 function executeThisCodeAfterFileLoads() {
-	var data = JSON.parse(this.responseText);
-	products = data.products;
+	var productsData = JSON.parse(this.responseText).products;
 	// after the first request loads, send the request for the second
+	getCategories(productsData);
 }
-// Transfering JSON categories array into js array 'categories'
-function executeThisCodeAfterFileLoads2() {
-	var data = JSON.parse(this.responseText);
-	categories = data.categories;
-	// Only after both requests complete wil anything else happen
-	moveOn();
-}
+
 function executeThisCodeIfFileErrors () {
 	console.log("shits broke yo");
 }
+
+//Step 1
 //transfering data from json file to js file
 var myRequestForProducts = new XMLHttpRequest();
 myRequestForProducts.addEventListener("load", executeThisCodeAfterFileLoads);
@@ -111,8 +84,45 @@ myRequestForProducts.addEventListener("error", executeThisCodeIfFileErrors);
 myRequestForProducts.open("GET", "products.json");
 myRequestForProducts.send();
 
-var myRequestForCategories = new XMLHttpRequest();
-myRequestForCategories.addEventListener("load", executeThisCodeAfterFileLoads2);
-myRequestForCategories.addEventListener("error", executeThisCodeIfFileErrors);
-myRequestForCategories.open("GET", "categories.json");	
-myRequestForCategories.send();
+// Step 3
+function getCategories(products){
+	var myRequestForCategories = new XMLHttpRequest();
+	myRequestForCategories.addEventListener("load", executeThisCodeAfterFileLoads2);
+	myRequestForCategories.addEventListener("error", executeThisCodeIfFileErrors);
+	myRequestForCategories.open("GET", "categories.json");	
+	myRequestForCategories.send();
+
+
+	// step 4
+	function executeThisCodeAfterFileLoads2() {
+		var categoriesData = JSON.parse(this.responseText).categories;
+		//step 5
+		// Only after both requests complete wil anything else happen
+		combinedArray(products, categoriesData)
+	}
+}
+//step 6, congrats we got both arrays in one place
+// ... and combined them into productsArray
+// ... and sent it to domString function
+function combinedArray(productsArray, categoriesArray) {
+	console.log("products from combined array", productsArray);
+	console.log("cats from combined array", categoriesArray);
+	// loop through products and look at category_id
+	productsArray.forEach(function(product){
+		var currentProductId = product["category_id"];
+		// Step 7, looping through both ...
+		categoriesArray.forEach(function(category){
+			if (currentProductId === category.id){
+
+			// Step 8 ... to add new key value pairs from breeds
+			product.categoryName = category.name;
+			product.categorySeason = category["season_discount"]
+			product.discount = category.discount;
+			}
+		})
+	});
+			console.log("all products", productsArray);
+			// Step 9
+			domString(productsArray);
+}
+			console.log("all products", productsArray);
