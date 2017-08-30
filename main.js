@@ -5,6 +5,7 @@ function domString(crap) {
 	for (var i = 0; i < crap.length; i++){
 		domString += 	`<div class="productItem">`;
 		domString += 		`<h1>${crap[i].name}</h1>`;
+		domString += 		`<img src="${crap[i].productImage}">`;
 		domString += 		`<h5>Department: ${crap[i].categoryName}</h5>`;
 		domString += 		`<h3>&#36;${crap[i].price}</h3>`;
 		domString +=		crap[i].hasDiscount ? `<h2>Discounted Price: &#36;${crap[i].discountedPrice}</h2>` : "";
