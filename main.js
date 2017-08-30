@@ -1,9 +1,5 @@
-// Initialize the 2 arrays that the JSON arrays will be put into
-var products = [];
-var categories = [];
 var seasonSelect = document.getElementById("season-select");
 var discountsButton = document.getElementById("showDiscounts");
-
 function domString(crap) {
 	var domString = "";
 	for (var i = 0; i < crap.length; i++){
@@ -11,48 +7,37 @@ function domString(crap) {
 		domString += 		`<h1>${crap[i].name}</h1>`;
 		domString += 		`<h5>Department: ${crap[i].categoryName}</h5>`;
 		domString += 		`<h3>&#36;${crap[i].price}</h3>`;
+		domString +=		crap[i].hasDiscount ? `<h2>Discounted Price: &#36;${crap[i].discountedPrice}</h2>` : "";
 		domString +=  `</div>`
 	}
 	writeToDom(domString);
 }
+function writeToDom(strang) {
+	var prodContainer = document.getElementById("product-container");
+	prodContainer.innerHTML = strang;
+}
+// event on the "Show discouns button" ...
+function catchDiscountChoice(productsArray) {
 
-discountsButton.addEventListener("click", function(){
-	var chosenSeason = seasonSelect.value;
-	if(chosenSeason === "winter"){
-	console.log("Winter numbers", chosenSeason);
-		for (var i = 0; i < products.length; i++){
-			if (products[i].categorySeason === "Winter"){
-				console.log(products[i].categorySeason);
-				console.log(calculateDiscount(products[i].price, products[i].discount));
+	discountsButton.addEventListener("click", function(){
+		// ... assign the current season to a variable ...
+		var chosenSeason = seasonSelect.value;
+		// ... after that, loop through each product ...
+		productsArray.forEach(function(product){
+			product.hasDiscount = false;
+			// when the chosen discount season matches the season of the product...
+			if (product.categorySeason.toLowerCase() === chosenSeason.toLowerCase()) {
+				// ... add that discounted price to the product in the array
+				product["discountedPrice"] = calculateDiscount(product.price, product.discount);
+				product.hasDiscount = true;
 			}
-		}
-	}
-	if(chosenSeason === "autumn"){
-		console.log("Autumn numbers", chosenSeason);
-		for (var i = 0; i < products.length; i++){
-			if (products[i].categorySeason === "Autumn"){
-				console.log(products[i].categorySeason);
-				console.log(calculateDiscount(products[i].price, products[i].discount));
+			if (chosenSeason.toLowerCase() === "none" && product["discountedPrice"] != undefined) {
+				product.hasDiscount = false;
 			}
-		}
+		})
+		domString(productsArray);
+	});
 	}
-	if(chosenSeason === "spring"){
-		console.log("Spring numbers", chosenSeason);
-		for (var i = 0; i < products.length; i++){
-			if (products[i].categorySeason === "Spring"){
-				console.log(products[i].categorySeason);
-				console.log(calculateDiscount(products[i].price, products[i].discount));
-			}
-		}
-	}
-});
-
-
-//stretch goal function to shorten for and if loop
-// function currentSeasonToDiscount(season){
-
-// }
-
 
 //discount function
 function calculateDiscount(itemPrice, seasonDiscount) {
@@ -61,49 +46,19 @@ function calculateDiscount(itemPrice, seasonDiscount) {
 	itemPrice = (itemPrice - discount) / 100;
 	itemPrice = itemPrice.toFixed(2);
 	return itemPrice;
+	}
+// Step 2
+function executeThisCodeAfterFileLoads() {
+	var productsData = JSON.parse(this.responseText).products;
+	// after the first request loads, send the request for the second
+	getCategories(productsData);
 }
 
-function moveOn() {
-	addDepartmentToProducts();
-	domString(products);
-	console.log(products);
-}
-function writeToDom(strang) {
-	var prodContainer = document.getElementById("product-container");
-	prodContainer.innerHTML += strang;
-}
-// Function to add relevant data from "catagories" to "products"
-function addDepartmentToProducts(){
-	// Run throguh each product...
-	for (var i = 0; i < products.length; i++) {
-		//... And while in each product loop through the categories array ...
-		for (var j = 0; j < categories.length; j++) {
-			// ... To compare the ids between the two arrays because if they match up ...
-			if (products[i]["category_id"] === categories[j]["id"]){
-				// ... Give the product the corresponding deparment name, season discount, and discount.
-				products[i].categoryName = categories[j].name;
-				products[i].categorySeason = categories[j]["season_discount"]
-				products[i].discount = categories[j].discount;
-			}
-		}
-	}
-}
-// Transfering JSON products array into js array 'products'
-function executeThisCodeAfterFileLoads() {
-	var data = JSON.parse(this.responseText);
-	products = data.products;
-	// after the first request loads, send the request for the second
-}
-// Transfering JSON categories array into js array 'categories'
-function executeThisCodeAfterFileLoads2() {
-	var data = JSON.parse(this.responseText);
-	categories = data.categories;
-	// Only after both requests complete wil anything else happen
-	moveOn();
-}
 function executeThisCodeIfFileErrors () {
 	console.log("shits broke yo");
 }
+
+//Step 1
 //transfering data from json file to js file
 var myRequestForProducts = new XMLHttpRequest();
 myRequestForProducts.addEventListener("load", executeThisCodeAfterFileLoads);
@@ -111,8 +66,45 @@ myRequestForProducts.addEventListener("error", executeThisCodeIfFileErrors);
 myRequestForProducts.open("GET", "products.json");
 myRequestForProducts.send();
 
-var myRequestForCategories = new XMLHttpRequest();
-myRequestForCategories.addEventListener("load", executeThisCodeAfterFileLoads2);
-myRequestForCategories.addEventListener("error", executeThisCodeIfFileErrors);
-myRequestForCategories.open("GET", "categories.json");	
-myRequestForCategories.send();
+// Step 3
+function getCategories(products){
+	var myRequestForCategories = new XMLHttpRequest();
+	myRequestForCategories.addEventListener("load", executeThisCodeAfterFileLoads2);
+	myRequestForCategories.addEventListener("error", executeThisCodeIfFileErrors);
+	myRequestForCategories.open("GET", "categories.json");	
+	myRequestForCategories.send();
+
+	// step 4
+	function executeThisCodeAfterFileLoads2() {
+		var categoriesData = JSON.parse(this.responseText).categories;
+		//step 5
+		// Only after both requests complete wil anything else happen
+		combinedArray(products, categoriesData)
+	}
+}
+//step 6, congrats we got both arrays in one place
+// ... and combined them into productsArray
+// ... and sent it to domString function
+function combinedArray(productsArray, categoriesArray) {
+	// console.log("products from combined array", productsArray);
+	// console.log("cats from combined array", categoriesArray);
+	// loop through products and look at category_id
+	productsArray.forEach(function(product){
+		var currentProductId = product["category_id"];
+		// Step 7, looping through both ...
+		categoriesArray.forEach(function(category){
+			if (currentProductId === category.id){
+
+			// Step 8 ... to add new key value pairs from breeds
+			product.categoryName = category.name;
+			product.categorySeason = category["season_discount"]
+			product.discount = category.discount;
+			product.hasDiscount = false;
+			}
+		})
+	});
+	// Step 9
+	// Send the complete array to the discount function, prepping it with the knowledge of the array, before it even runs
+	catchDiscountChoice(productsArray);
+	domString(productsArray);
+}
