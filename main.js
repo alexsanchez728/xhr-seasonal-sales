@@ -1,9 +1,5 @@
-		var seasonSelect = document.getElementById("season-select");
-		var discountsButton = document.getElementById("showDiscounts");
-// var isDiscounted = false;
-// var priceEl = "";
-// var priceTextNode = "";
-
+var seasonSelect = document.getElementById("season-select");
+var discountsButton = document.getElementById("showDiscounts");
 function domString(crap) {
 	var domString = "";
 	for (var i = 0; i < crap.length; i++){
@@ -11,15 +7,15 @@ function domString(crap) {
 		domString += 		`<h1>${crap[i].name}</h1>`;
 		domString += 		`<h5>Department: ${crap[i].categoryName}</h5>`;
 		domString += 		`<h3>&#36;${crap[i].price}</h3>`;
+		domString +=		crap[i].hasDiscount ? `<h2>Discounted Price: &#36;${crap[i].discountedPrice}</h2>` : "";
 		domString +=  `</div>`
 	}
 	writeToDom(domString);
 }
 function writeToDom(strang) {
 	var prodContainer = document.getElementById("product-container");
-	prodContainer.innerHTML += strang;
+	prodContainer.innerHTML = strang;
 }
-
 // event on the "Show discouns button" ...
 function catchDiscountChoice(productsArray) {
 
@@ -28,19 +24,18 @@ function catchDiscountChoice(productsArray) {
 		var chosenSeason = seasonSelect.value;
 		// ... after that, loop through each product ...
 		productsArray.forEach(function(product){
+			product.hasDiscount = false;
 			// when the chosen discount season matches the season of the product...
 			if (product.categorySeason.toLowerCase() === chosenSeason.toLowerCase()) {
 				// ... add that discounted price to the product in the array
-				// product["discountedPrice"] = calculateDiscount(product.price, product.discount);
 				product["discountedPrice"] = calculateDiscount(product.price, product.discount);
+				product.hasDiscount = true;
 			}
 			if (chosenSeason.toLowerCase() === "none" && product["discountedPrice"] != undefined) {
-				// product["discountedPrice"]
-				console.log("find the discounted price");
+				product.hasDiscount = false;
 			}
 		})
-		console.log("Products array with discountedPrice added", productsArray);
-
+		domString(productsArray);
 	});
 	}
 
@@ -51,7 +46,7 @@ function calculateDiscount(itemPrice, seasonDiscount) {
 	itemPrice = (itemPrice - discount) / 100;
 	itemPrice = itemPrice.toFixed(2);
 	return itemPrice;
-}
+	}
 // Step 2
 function executeThisCodeAfterFileLoads() {
 	var productsData = JSON.parse(this.responseText).products;
@@ -104,13 +99,12 @@ function combinedArray(productsArray, categoriesArray) {
 			product.categoryName = category.name;
 			product.categorySeason = category["season_discount"]
 			product.discount = category.discount;
+			product.hasDiscount = false;
 			}
 		})
 	});
-	console.log("all products", productsArray);
 	// Step 9
+	// Send the complete array to the discount function, prepping it with the knowledge of the array, before it even runs
 	catchDiscountChoice(productsArray);
 	domString(productsArray);
-
-	// Send the complete array to the discount function, prepping it with the knowledge of the array, before it even runs
 }
