@@ -1,30 +1,27 @@
-<!-- Your job is to build a web page that lists all of the products, the name of the department it's in, and the price. Additionally, put a <select> element at the top of the page that contains all possible values of the season_discount key in the categories file. As soon as you select one of the seasons, all prices on the page should immediately be discounted by the corresponding percentage.
-
-For example, when Spring is chosen, all products in the corresponding Household category should have their prices updated with a 15% discount off the base price.
-
-The two JSON representations above should be in two files: products.json, and categories.json. You should load both files via XHRs and store the contents in two different JavaScript variables in your code. -->
-
-
 <!DOCTYPE html>
 <html>
 <head>
+<link href="https://fonts.googleapis.com/css?family=Mukta+Mahee:300,400,800" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="main.css">
 	<title>Seasonal Sales</title>
 </head>
 <body>
 	<main>
-
-		<label for="seasonal-discounts">Seasonal Discounts</label>
-		<select id="season-select" name="seasonal-discounts">
-		  <option value="none" selected>None selected</option> 
-		  <option value="winter">Winter</option> 
-		  <option value="autumn">Autumn</option>
-		  <option value="spring">Spring</option>
-		</select>
-		<input type="button" id="showDiscounts" value="Show discounts"></input>
-
-		<div id="product-container"></div>
+		<section id="inputArea">
+			<header>Seasonal Discounts</header>
+			<label for="seasonal-discounts">Choose a season then press that button to see your discounts!</label>
+			<select id="season-select" name="seasonal-discounts">
+			  <option value="none" selected>None selected</option> 
+			  <option value="winter">Winter</option> 
+			  <option value="autumn">Autumn</option>
+			  <option value="spring">Spring</option>
+			</select>
+			<input type="button" id="showDiscounts" value="Show discounts"></input>
+		</section>
+		<section id="product-container"></section>
 
 	</main>
+	<footer>An site for excersie by Alex Sanchez</footer>
 	<script type="text/javascript" src="main.js"></script>
 </body>
 </html>
