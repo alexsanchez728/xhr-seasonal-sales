@@ -14,6 +14,7 @@ A simple product page that displays:
 * The department it's located in
 * And, when selected, the product's discounted price
 
+[logo]: https://github.com/alexsanchez728/xhr-seasonal-sales/blob/master/readme-images/Season-sales-example-trimmed.gif "Logo Title Text 2"
 
 
 
