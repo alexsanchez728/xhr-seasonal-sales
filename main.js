@@ -4,11 +4,13 @@ function domString(crap) {
 	var domString = "";
 	for (var i = 0; i < crap.length; i++){
 		domString += 	`<div class="productItem">`;
-		domString += 		`<h1>${crap[i].name}</h1>`;
+		domString += 		`<h2>${crap[i].name}</h2>`;
+		domString += 		`<div class="border-div"></div>`;
 		domString += 		`<img src="${crap[i].productImage}">`;
 		domString += 		`<h5>Department: ${crap[i].categoryName}</h5>`;
-		domString += 		`<h3>&#36;${crap[i].price}</h3>`;
-		domString +=		crap[i].hasDiscount ? `<h2>Discounted Price: &#36;${crap[i].discountedPrice}</h2>` : "";
+		domString +=		crap[i].hasDiscount ? `<h3 class="price"><s>&#36;${crap[i].price}</s></h3>` : `<h3 class="price">&#36;${crap[i].price}</h3>`;
+		// domString += 		`<h3>&#36;${crap[i].price}</h3>`;
+		domString +=		crap[i].hasDiscount ? `<h3 class="discounted">Discounted Price: &#36;${crap[i].discountedPrice}</h3>` : "";
 		domString +=  `</div>`
 	}
 	writeToDom(domString);

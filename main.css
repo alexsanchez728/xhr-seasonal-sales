@@ -1,0 +1,54 @@
+body {
+	background-color: #E8D8C4;
+	font-family: 'Mukta Mahee', sans-serif;
+	margin: 0;
+	/*300 normal, 400, and 800 bold*/
+}
+header {
+	font-size: 2em;
+	display: block;
+}
+img {
+	max-width: 300px;
+	max-height: 200px;
+	border-radius: 5px;
+	margin-top: 15px;
+}
+h2 {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+h3 {
+	text-align: right;
+}
+
+#inputArea {
+	text-align: center;
+}
+#product-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+.border-div {
+	margin: 0 auto;	
+	border-bottom: 1px solid black;
+	width: 25%;
+}
+.productItem h5 {
+	margin-top: 5px;
+}
+.productItem {
+	margin: 10px 15px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19);
+	background-color: #fff;
+	text-align: center;
+	width: 350px;
+}
+.price, .discounted {
+	margin-right: 10px;
+}
+.discounted {
+	color: salmon;
+}
+
